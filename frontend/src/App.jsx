@@ -7,6 +7,10 @@ import TicketDetail from "./pages/TicketDetail";
 import CreateTicket from "./pages/CreateTicket";
 import EditTicket from "./pages/EditTicket";
 import ProtectedRoute from "./components/ProtectedRoute";
+import FAQList from "./pages/faq/FAQList";
+import FAQDetail from "./pages/faq/FAQDetail";
+import CreateFAQ from "./pages/faq/CreateFAQ";
+import EditFAQ from "./pages/faq/EditFAQ";
 
 function Dashboard() {
   return <h1 style={{ padding: "2rem" }}>✅ Dashboard (Coming Soon)</h1>;
@@ -27,6 +31,11 @@ export default function App() {
           <Route path="/tickets/create" element={<ProtectedRoute><CreateTicket /></ProtectedRoute>} />
           <Route path="/tickets/:id" element={<ProtectedRoute><TicketDetail /></ProtectedRoute>} />
           <Route path="/tickets/:id/edit" element={<ProtectedRoute><EditTicket /></ProtectedRoute>} />
+
+          <Route path="/faq" element={<ProtectedRoute><FAQList /></ProtectedRoute>} />
+          <Route path="/faq/create" element={<ProtectedRoute><CreateFAQ /></ProtectedRoute>} />
+          <Route path="/faq/:id" element={<ProtectedRoute><FAQDetail /></ProtectedRoute>} />
+          <Route path="/faq/:id/edit" element={<ProtectedRoute><EditFAQ /></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
