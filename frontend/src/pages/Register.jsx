@@ -28,16 +28,16 @@ export default function Register() {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-md w-87.5">
         <h2>Register</h2>
-        {error && <p style={styles.error}>{error}</p>}
-        {success && <p style={styles.success}>{success}</p>}
+        {error && <p className="text-red-500">{error}</p>}
+        {success && <p className="text-green-500">{success}</p>}
         <form onSubmit={handleSubmit}>
-          <input style={styles.input} name="name" placeholder="Full Name" value={form.name} onChange={handleChange} required />
-          <input style={styles.input} name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange} required />
-          <input style={styles.input} name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} required />
-          <button style={styles.button} type="submit">Register</button>
+          <input className="w-full p-2.5 mb-4 rounded border border-gray-300 box-border" name="name" placeholder="Full Name" value={form.name} onChange={handleChange} required />
+          <input className="w-full p-2.5 mb-4 rounded border border-gray-300 box-border" name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange} required />
+          <input className="w-full p-2.5 mb-4 rounded border border-gray-300 box-border" name="password" type="password" placeholder="Password" value={form.password} onChange={handleChange} required />
+          <button className="w-full p-2.5 bg-green-500 text-white border-none rounded cursor-pointer" type="submit">Register</button>
         </form>
         <p>Already have an account? <Link to="/login">Login</Link></p>
       </div>
@@ -45,11 +45,3 @@ export default function Register() {
   );
 }
 
-const styles = {
-  container: { display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", background: "#f0f2f5" },
-  card: { background: "white", padding: "2rem", borderRadius: "8px", boxShadow: "0 2px 10px rgba(0,0,0,0.1)", width: "350px" },
-  input: { width: "100%", padding: "10px", marginBottom: "1rem", borderRadius: "4px", border: "1px solid #ccc", boxSizing: "border-box" },
-  button: { width: "100%", padding: "10px", background: "#52c41a", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" },
-  error: { color: "red" },
-  success: { color: "green" },
-};

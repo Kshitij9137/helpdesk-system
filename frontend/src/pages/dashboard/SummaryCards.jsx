@@ -8,27 +8,19 @@ const cards = [
 
 export default function SummaryCards({ summary }) {
   return (
-    <div style={styles.grid}>
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-4 mb-8">
       {cards.map(card => (
-        <div key={card.key} style={{ ...styles.card, borderTop: `4px solid ${card.color}`, background: card.bg }}>
-          <div style={styles.cardTop}>
-            <span style={styles.icon}>{card.icon}</span>
-            <span style={{ ...styles.count, color: card.color }}>
+        <div key={card.key} className="rounded-lg p-5 shadow-sm" style={{ borderTop: `4px solid ${card.color}`, background: card.bg }}>
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-xl">{card.icon}</span>
+            <span className="text-2xl font-extrabold leading-none" style={{ color: card.color }}>
               {summary[card.key] ?? 0}
             </span>
           </div>
-          <p style={styles.label}>{card.label}</p>
+          <p className="m-0 text-gray-600 font-semibold text-xs">{card.label}</p>
         </div>
       ))}
     </div>
   );
 }
 
-const styles = {
-  grid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "1rem", marginBottom: "2rem" },
-  card: { borderRadius: "8px", padding: "1.25rem 1rem", boxShadow: "0 1px 4px rgba(0,0,0,0.07)" },
-  cardTop: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" },
-  icon: { fontSize: "1.5rem" },
-  count: { fontSize: "2rem", fontWeight: "800", lineHeight: 1 },
-  label: { margin: 0, color: "#555", fontWeight: "600", fontSize: "0.85rem" },
-};

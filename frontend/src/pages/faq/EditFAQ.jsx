@@ -48,46 +48,35 @@ export default function EditFAQ() {
     }
   };
 
-  if (!form) return <p style={{ padding: "2rem" }}>Loading...</p>;
+  if (!form) return <p className="p-8">Loading...</p>;
 
   return (
-    <div style={styles.page}>
-      <button style={styles.backBtn} onClick={() => navigate(`/faq/${id}`)}>← Back to FAQ</button>
-      <div style={styles.card}>
+    <div className="p-8 max-w-[650px] mx-auto">
+      <button className="bg-none border-none text-blue-500 cursor-pointer text-base mb-4 p-0" onClick={() => navigate(`/faq/${id}`)}>← Back to FAQ</button>
+      <div className="bg-white rounded-lg p-7 shadow-sm">
         <h2>Edit FAQ</h2>
-        {success && <p style={styles.success}>{success}</p>}
-        {error && <p style={styles.error}>{error}</p>}
+        {success && <p className="text-green-500">{success}</p>}
+        {error && <p className="text-red-500">{error}</p>}
 
         <form onSubmit={handleSubmit}>
-          <label style={styles.label}>Question</label>
-          <input style={styles.input} name="question" value={form.question} onChange={handleChange} required />
+          <label className="block font-bold mb-1 mt-4">Question</label>
+          <input className="w-full p-2.5 rounded border border-gray-300 box-border text-sm" name="question" value={form.question} onChange={handleChange} required />
 
-          <label style={styles.label}>Answer</label>
-          <textarea style={{ ...styles.input, height: "140px", resize: "vertical" }} name="answer" value={form.answer} onChange={handleChange} required />
+          <label className="block font-bold mb-1 mt-4">Answer</label>
+          <textarea className="w-full p-2.5 rounded border border-gray-300 box-border text-sm h-[140px] resize-y" name="answer" value={form.answer} onChange={handleChange} required />
 
-          <label style={styles.label}>Category</label>
-          <select style={styles.input} name="category" value={form.category} onChange={handleChange}>
+          <label className="block font-bold mb-1 mt-4">Category</label>
+          <select className="w-full p-2.5 rounded border border-gray-300 box-border text-sm" name="category" value={form.category} onChange={handleChange}>
             {CATEGORIES.map(c => <option key={c}>{c}</option>)}
           </select>
 
-          <label style={styles.label}>Tags <span style={styles.hint}>(comma separated)</span></label>
-          <input style={styles.input} name="tags" value={form.tags} onChange={handleChange} />
+          <label className="block font-bold mb-1 mt-4">Tags <span className="font-normal text-gray-400 text-xs">(comma separated)</span></label>
+          <input className="w-full p-2.5 rounded border border-gray-300 box-border text-sm" name="tags" value={form.tags} onChange={handleChange} />
 
-          <button style={styles.submitBtn} type="submit">Save Changes</button>
+          <button className="mt-6 w-full p-2.5 bg-yellow-500 text-white border-none rounded cursor-pointer font-bold text-base" type="submit">Save Changes</button>
         </form>
       </div>
     </div>
   );
 }
 
-const styles = {
-  page: { padding: "2rem", maxWidth: "650px", margin: "0 auto" },
-  backBtn: { background: "none", border: "none", color: "#1890ff", cursor: "pointer", fontSize: "1rem", marginBottom: "1rem", padding: 0 },
-  card: { background: "white", borderRadius: "8px", padding: "1.75rem 2rem", boxShadow: "0 2px 10px rgba(0,0,0,0.08)" },
-  label: { display: "block", fontWeight: "bold", marginBottom: "4px", marginTop: "1rem" },
-  hint: { fontWeight: "normal", color: "#aaa", fontSize: "0.85rem" },
-  input: { width: "100%", padding: "10px", borderRadius: "4px", border: "1px solid #ccc", boxSizing: "border-box", fontSize: "0.95rem" },
-  submitBtn: { marginTop: "1.5rem", width: "100%", padding: "10px", background: "#faad14", color: "white", border: "none", borderRadius: "4px", cursor: "pointer", fontWeight: "bold", fontSize: "1rem" },
-  success: { color: "green" },
-  error: { color: "red" },
-};

@@ -38,21 +38,21 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div style={styles.loading}>
-        <div style={styles.spinner} />
+      <div className="flex flex-col items-center justify-center h-[60vh] text-gray-500">
+        <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin mb-4" />
         <p>Loading dashboard...</p>
       </div>
     );
   }
 
   return (
-    <div style={styles.page}>
+    <div className="p-8 max-w-275 mx-auto">
 
       {/* Page Header */}
-      <div style={styles.header}>
+      <div className="mb-7">
         <div>
-          <h2 style={{ margin: 0 }}>Dashboard</h2>
-          <p style={styles.subtitle}>
+          <h2 className="m-0">Dashboard</h2>
+          <p className="text-gray-500 m-0 mt-1 text-sm">
             Overview as of {new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
           </p>
         </div>
@@ -62,11 +62,11 @@ export default function Dashboard() {
       <SummaryCards summary={summary} />
 
       {/* Two charts side by side on wider screens */}
-      <div style={styles.chartsRow}>
-        <div style={styles.chartLeft}>
+      <div className="grid grid-cols-2 gap-6 mb-0">
+        <div className="min-w-0">
           <TicketTrendsChart trends={trends} />
         </div>
-        <div style={styles.chartRight}>
+        <div className="min-w-0">
           <ResolutionTimeChart resolutionData={resolution} />
         </div>
       </div>
@@ -78,13 +78,3 @@ export default function Dashboard() {
   );
 }
 
-const styles = {
-  page: { padding: "2rem", maxWidth: "1100px", margin: "0 auto" },
-  header: { marginBottom: "1.75rem" },
-  subtitle: { color: "#888", margin: "4px 0 0 0", fontSize: "0.9rem" },
-  chartsRow: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", marginBottom: "0" },
-  chartLeft: { minWidth: 0 },   // prevents chart overflow
-  chartRight: { minWidth: 0 },
-  loading: { display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "60vh", color: "#888" },
-  spinner: { width: "40px", height: "40px", border: "4px solid #f0f0f0", borderTop: "4px solid #1890ff", borderRadius: "50%", animation: "spin 0.8s linear infinite", marginBottom: "1rem" },
-};

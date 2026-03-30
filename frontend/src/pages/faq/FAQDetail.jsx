@@ -34,43 +34,43 @@ export default function FAQDetail() {
     // });
   };
 
-  if (deleted) return <p style={{ padding: "2rem", color: "red" }}>FAQ deleted. Redirecting...</p>;
-  if (!faq) return <p style={{ padding: "2rem" }}>FAQ not found.</p>;
+  if (deleted) return <p className="p-8 text-red-500">FAQ deleted. Redirecting...</p>;
+  if (!faq) return <p className="p-8">FAQ not found.</p>;
 
   return (
-    <div style={styles.page}>
-      <button style={styles.backBtn} onClick={() => navigate("/faq")}>← Back to Knowledge Base</button>
+    <div className="p-8 max-w-[750px] mx-auto">
+      <button className="bg-none border-none text-blue-500 cursor-pointer text-base mb-4 p-0" onClick={() => navigate("/faq")}>← Back to Knowledge Base</button>
 
-      <div style={styles.card}>
+      <div className="bg-white rounded-lg p-7 shadow-sm">
 
         {/* Category + Tags */}
-        <div style={styles.topMeta}>
-          <span style={styles.categoryBadge}>{faq.category}</span>
-          <div style={styles.tags}>
+        <div className="flex items-center gap-2.5 flex-wrap mb-4">
+          <span className="px-3 py-1 bg-blue-50 text-blue-500 rounded-full text-xs font-bold">{faq.category}</span>
+          <div className="flex gap-1.5 flex-wrap">
             {faq.tags.map(tag => (
-              <span key={tag} style={styles.tag}>#{tag}</span>
+              <span key={tag} className="bg-gray-100 text-gray-500 px-2 py-0.5 rounded text-xs">#{tag}</span>
             ))}
           </div>
         </div>
 
         {/* Question */}
-        <h2 style={styles.question}>{faq.question}</h2>
+        <h2 className="text-xl font-bold m-0 mb-2 text-gray-800">{faq.question}</h2>
 
-        <hr style={{ margin: "1rem 0" }} />
+        <hr className="m-4 m-0" />
 
         {/* Answer */}
-        <p style={styles.answer}>{faq.answer}</p>
+        <p className="text-base text-gray-600 leading-[1.8] m-0">{faq.answer}</p>
 
         {/* Admin Actions */}
         {CURRENT_USER_ROLE === "Admin" && (
-          <div style={styles.actions}>
+          <div className="flex gap-2.5 mt-6">
             <button
-              style={styles.editBtn}
+              className="p-2 px-5 bg-yellow-500 border-none rounded cursor-pointer font-bold"
               onClick={() => navigate(`/faq/${faq.id}/edit`)}
             >
               ✏️ Edit
             </button>
-            <button style={styles.deleteBtn} onClick={handleDelete}>
+            <button className="p-2 px-5 bg-red-500 text-white border-none rounded cursor-pointer font-bold" onClick={handleDelete}>
               🗑️ Delete
             </button>
           </div>
@@ -78,31 +78,14 @@ export default function FAQDetail() {
       </div>
 
       {/* Was this helpful? */}
-      <div style={styles.helpful}>
-        <p style={{ margin: "0 0 8px 0", fontWeight: "bold" }}>Was this helpful?</p>
-        <div style={styles.helpfulBtns}>
-          <button style={styles.helpfulBtn}>👍 Yes</button>
-          <button style={styles.helpfulBtn}>👎 No</button>
+      <div className="mt-6 bg-white rounded-lg p-5 shadow-sm text-center">
+        <p className="m-0 mb-2 font-bold">Was this helpful?</p>
+        <div className="flex gap-3 justify-center">
+          <button className="p-2 px-6 border border-gray-300 rounded bg-white cursor-pointer text-base">👍 Yes</button>
+          <button className="p-2 px-6 border border-gray-300 rounded bg-white cursor-pointer text-base">👎 No</button>
         </div>
       </div>
     </div>
   );
 }
 
-const styles = {
-  page: { padding: "2rem", maxWidth: "750px", margin: "0 auto" },
-  backBtn: { background: "none", border: "none", color: "#1890ff", cursor: "pointer", fontSize: "1rem", marginBottom: "1rem", padding: 0 },
-  card: { background: "white", borderRadius: "8px", padding: "1.75rem 2rem", boxShadow: "0 2px 10px rgba(0,0,0,0.08)" },
-  topMeta: { display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap", marginBottom: "1rem" },
-  categoryBadge: { padding: "4px 12px", background: "#f0f5ff", color: "#1890ff", borderRadius: "12px", fontSize: "0.8rem", fontWeight: "bold" },
-  tags: { display: "flex", gap: "6px", flexWrap: "wrap" },
-  tag: { background: "#f5f5f5", color: "#888", padding: "3px 8px", borderRadius: "4px", fontSize: "0.78rem" },
-  question: { fontSize: "1.3rem", fontWeight: "700", margin: "0 0 0.5rem 0", color: "#222" },
-  answer: { fontSize: "1rem", color: "#444", lineHeight: "1.8", margin: 0 },
-  actions: { display: "flex", gap: "10px", marginTop: "1.5rem" },
-  editBtn: { padding: "8px 20px", background: "#faad14", border: "none", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" },
-  deleteBtn: { padding: "8px 20px", background: "#ff4d4f", color: "white", border: "none", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" },
-  helpful: { marginTop: "1.5rem", background: "white", borderRadius: "8px", padding: "1.25rem 2rem", boxShadow: "0 1px 4px rgba(0,0,0,0.06)", textAlign: "center" },
-  helpfulBtns: { display: "flex", gap: "12px", justifyContent: "center" },
-  helpfulBtn: { padding: "8px 24px", border: "1px solid #d9d9d9", borderRadius: "4px", background: "white", cursor: "pointer", fontSize: "1rem" },
-};

@@ -30,42 +30,42 @@ export default function FAQList() {
   });
 
   return (
-    <div style={styles.page}>
+    <div className="p-8 max-w-[900px] mx-auto">
 
       {/* Header */}
-      <div style={styles.header}>
+      <div className="flex justify-between items-start mb-6">
         <div>
-          <h2 style={{ margin: 0 }}>Knowledge Base</h2>
-          <p style={styles.subtitle}>Find answers to common questions</p>
+          <h2 className="m-0">Knowledge Base</h2>
+          <p className="text-gray-500 m-0 mt-1 text-sm">Find answers to common questions</p>
         </div>
         {CURRENT_USER_ROLE === "Admin" && (
-          <button style={styles.createBtn} onClick={() => navigate("/faq/create")}>
+          <button className="p-2 px-4 bg-blue-500 text-white border-none rounded cursor-pointer font-bold whitespace-nowrap" onClick={() => navigate("/faq/create")}>
             + Add FAQ
           </button>
         )}
       </div>
 
       {/* Search Bar */}
-      <div style={styles.searchWrapper}>
-        <span style={styles.searchIcon}>🔍</span>
+      <div className="relative mb-5">
+        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base">🔍</span>
         <input
-          style={styles.searchInput}
+          className="w-full p-3 px-10 rounded-lg border border-gray-300 text-sm box-border outline-none"
           type="text"
           placeholder="Search by keyword, question, or tag..."
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
         {search && (
-          <button style={styles.clearBtn} onClick={() => setSearch("")}>✕</button>
+          <button className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-none border-none cursor-pointer text-gray-400 text-base" onClick={() => setSearch("")}>✕</button>
         )}
       </div>
 
       {/* Category Filter Tabs */}
-      <div style={styles.tabs}>
+      <div className="flex gap-2 mb-4 flex-wrap">
         {faqCategories.map(cat => (
           <button
             key={cat}
-            style={{ ...styles.tab, ...(category === cat ? styles.activeTab : {}) }}
+            className={`p-1.5 px-4 rounded-full border border-gray-300 bg-white cursor-pointer text-sm ${category === cat ? 'bg-blue-500 text-white border-blue-500' : ''}`}
             onClick={() => setCategory(cat)}
           >
             {cat}
@@ -74,7 +74,7 @@ export default function FAQList() {
       </div>
 
       {/* Results Count */}
-      <p style={styles.resultCount}>
+      <p className="text-gray-500 text-xs mb-4">
         {filtered.length} {filtered.length === 1 ? "result" : "results"}
         {search && ` for "${search}"`}
         {category !== "All" && ` in ${category}`}
@@ -82,27 +82,27 @@ export default function FAQList() {
 
       {/* FAQ Cards */}
       {filtered.length === 0 ? (
-        <div style={styles.empty}>
+        <div className="text-center p-12 text-gray-500">
           <p>😕 No FAQs found.</p>
-          <p style={{ fontSize: "0.9rem", color: "#aaa" }}>Try a different search term or category.</p>
+          <p className="text-sm text-gray-400">Try a different search term or category.</p>
         </div>
       ) : (
         filtered.map(faq => (
           <div
             key={faq.id}
-            style={styles.card}
+            className="bg-white border border-gray-200 rounded-lg p-5 mb-4 cursor-pointer shadow-sm"
             onClick={() => navigate(`/faq/${faq.id}`)}
           >
-            <div style={styles.cardTop}>
-              <span style={styles.question}>{faq.question}</span>
-              <span style={styles.categoryBadge}>{faq.category}</span>
+            <div className="flex justify-between items-start gap-4 mb-2">
+              <span className="font-semibold text-base flex-1">{faq.question}</span>
+              <span className="px-2.5 py-0.5 bg-blue-50 text-blue-500 rounded-full text-xs font-bold whitespace-nowrap">{faq.category}</span>
             </div>
-            <p style={styles.answerPreview}>
+            <p className="text-gray-600 text-sm m-0 mb-3 leading-relaxed">
               {faq.answer.length > 120 ? faq.answer.slice(0, 120) + "..." : faq.answer}
             </p>
-            <div style={styles.tags}>
+            <div className="flex gap-1.5 flex-wrap">
               {faq.tags.map(tag => (
-                <span key={tag} style={styles.tag}>#{tag}</span>
+                <span key={tag} className="bg-gray-100 text-gray-500 px-2 py-0.5 rounded text-xs">#{tag}</span>
               ))}
             </div>
           </div>
@@ -112,25 +112,3 @@ export default function FAQList() {
   );
 }
 
-const styles = {
-  page: { padding: "2rem", maxWidth: "900px", margin: "0 auto" },
-  header: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "1.5rem" },
-  subtitle: { color: "#888", margin: "4px 0 0 0", fontSize: "0.95rem" },
-  createBtn: { padding: "8px 16px", background: "#1890ff", color: "white", border: "none", borderRadius: "4px", cursor: "pointer", fontWeight: "bold", whiteSpace: "nowrap" },
-  searchWrapper: { position: "relative", marginBottom: "1.25rem" },
-  searchIcon: { position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", fontSize: "1rem" },
-  searchInput: { width: "100%", padding: "12px 40px 12px 38px", borderRadius: "8px", border: "1px solid #d9d9d9", fontSize: "0.95rem", boxSizing: "border-box", outline: "none" },
-  clearBtn: { position: "absolute", right: "12px", top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "#aaa", fontSize: "1rem" },
-  tabs: { display: "flex", gap: "8px", marginBottom: "1rem", flexWrap: "wrap" },
-  tab: { padding: "6px 16px", borderRadius: "20px", border: "1px solid #d9d9d9", background: "white", cursor: "pointer", fontSize: "0.9rem" },
-  activeTab: { background: "#1890ff", color: "white", border: "1px solid #1890ff" },
-  resultCount: { color: "#888", fontSize: "0.85rem", marginBottom: "1rem" },
-  empty: { textAlign: "center", padding: "3rem", color: "#888" },
-  card: { background: "white", border: "1px solid #e8e8e8", borderRadius: "8px", padding: "1.25rem", marginBottom: "1rem", cursor: "pointer", boxShadow: "0 1px 4px rgba(0,0,0,0.05)" },
-  cardTop: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", marginBottom: "0.5rem" },
-  question: { fontWeight: "600", fontSize: "1rem", flex: 1 },
-  categoryBadge: { padding: "3px 10px", background: "#f0f5ff", color: "#1890ff", borderRadius: "12px", fontSize: "0.78rem", fontWeight: "bold", whiteSpace: "nowrap" },
-  answerPreview: { color: "#666", fontSize: "0.9rem", margin: "0 0 0.75rem 0", lineHeight: "1.5" },
-  tags: { display: "flex", gap: "6px", flexWrap: "wrap" },
-  tag: { background: "#f5f5f5", color: "#888", padding: "2px 8px", borderRadius: "4px", fontSize: "0.78rem" },
-};

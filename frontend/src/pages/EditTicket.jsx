@@ -39,46 +39,36 @@ export default function EditTicket() {
     }
   };
 
-  if (!form) return <p style={{ padding: "2rem" }}>Loading...</p>;
+  if (!form) return <p className="p-8">Loading...</p>;
 
   return (
-    <div style={styles.page}>
-      <button style={styles.backBtn} onClick={() => navigate(`/tickets/${id}`)}>← Back to Ticket</button>
-      <div style={styles.card}>
+    <div className="p-8 max-w-162.5 mx-auto">
+      <button className="bg-none border-none text-blue-500 cursor-pointer text-base mb-4 p-0" onClick={() => navigate(`/tickets/${id}`)}>← Back to Ticket</button>
+      <div className="bg-white rounded-lg p-6 shadow-sm">
         <h2>Edit Ticket</h2>
-        {success && <p style={styles.success}>{success}</p>}
-        {error && <p style={styles.error}>{error}</p>}
+        {success && <p className="text-green-500">{success}</p>}
+        {error && <p className="text-red-500">{error}</p>}
         <form onSubmit={handleSubmit}>
-          <label style={styles.label}>Title</label>
-          <input style={styles.input} name="title" value={form.title} onChange={handleChange} required />
+          <label className="block font-bold mb-1 mt-4">Title</label>
+          <input className="w-full p-2.5 rounded border border-gray-300 box-border text-sm" name="title" value={form.title} onChange={handleChange} required />
 
-          <label style={styles.label}>Description</label>
-          <textarea style={{ ...styles.input, height: "120px", resize: "vertical" }} name="description" value={form.description} onChange={handleChange} required />
+          <label className="block font-bold mb-1 mt-4">Description</label>
+          <textarea className="w-full p-2.5 rounded border border-gray-300 box-border text-sm h-30 resize-y" name="description" value={form.description} onChange={handleChange} required />
 
-          <label style={styles.label}>Status</label>
-          <select style={styles.input} name="status" value={form.status} onChange={handleChange}>
+          <label className="block font-bold mb-1 mt-4">Status</label>
+          <select className="w-full p-2.5 rounded border border-gray-300 box-border text-sm" name="status" value={form.status} onChange={handleChange}>
             {["Open", "In Progress", "Resolved", "Closed"].map(s => <option key={s}>{s}</option>)}
           </select>
 
-          <label style={styles.label}>Priority</label>
-          <select style={styles.input} name="priority" value={form.priority} onChange={handleChange}>
+          <label className="block font-bold mb-1 mt-4">Priority</label>
+          <select className="w-full p-2.5 rounded border border-gray-300 box-border text-sm" name="priority" value={form.priority} onChange={handleChange}>
             {["Low", "Medium", "High", "Critical"].map(p => <option key={p}>{p}</option>)}
           </select>
 
-          <button style={styles.submitBtn} type="submit">Save Changes</button>
+          <button className="mt-6 w-full p-2.5 bg-yellow-500 text-white border-none rounded cursor-pointer font-bold text-base" type="submit">Save Changes</button>
         </form>
       </div>
     </div>
   );
 }
 
-const styles = {
-  page: { padding: "2rem", maxWidth: "650px", margin: "0 auto" },
-  backBtn: { background: "none", border: "none", color: "#1890ff", cursor: "pointer", fontSize: "1rem", marginBottom: "1rem", padding: 0 },
-  card: { background: "white", borderRadius: "8px", padding: "1.5rem 2rem", boxShadow: "0 2px 10px rgba(0,0,0,0.08)" },
-  label: { display: "block", fontWeight: "bold", marginBottom: "4px", marginTop: "1rem" },
-  input: { width: "100%", padding: "10px", borderRadius: "4px", border: "1px solid #ccc", boxSizing: "border-box", fontSize: "0.95rem" },
-  submitBtn: { marginTop: "1.5rem", width: "100%", padding: "10px", background: "#faad14", color: "white", border: "none", borderRadius: "4px", cursor: "pointer", fontWeight: "bold", fontSize: "1rem" },
-  success: { color: "green" },
-  error: { color: "red" },
-};

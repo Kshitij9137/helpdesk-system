@@ -56,19 +56,13 @@ export default function ResolutionTimeChart({ resolutionData }) {
   };
 
   return (
-    <div style={styles.card}>
-      <div style={styles.cardHeader}>
-        <h3 style={styles.title}>⏱️ Avg Resolution Time by Priority</h3>
-        <span style={styles.subtitle}>vs SLA Target</span>
+    <div className="bg-white rounded-lg p-6 shadow-sm mb-6">
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="m-0 text-base font-bold">⏱️ Avg Resolution Time by Priority</h3>
+        <span className="text-gray-400 text-xs">vs SLA Target</span>
       </div>
       <Bar data={data} options={options} />
     </div>
   );
 }
 
-const styles = {
-  card: { background: "white", borderRadius: "8px", padding: "1.5rem", boxShadow: "0 1px 6px rgba(0,0,0,0.07)", marginBottom: "1.5rem" },
-  cardHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem" },
-  title: { margin: 0, fontSize: "1rem", fontWeight: "700" },
-  subtitle: { color: "#aaa", fontSize: "0.85rem" },
-};
