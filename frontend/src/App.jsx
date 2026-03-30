@@ -1,3 +1,4 @@
+import Dashboard from "./pages/dashboard/Dashboard";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import Login from "./pages/Login";
@@ -12,9 +13,6 @@ import FAQDetail from "./pages/faq/FAQDetail";
 import CreateFAQ from "./pages/faq/CreateFAQ";
 import EditFAQ from "./pages/faq/EditFAQ";
 
-function Dashboard() {
-  return <h1 style={{ padding: "2rem" }}>✅ Dashboard (Coming Soon)</h1>;
-}
 
 export default function App() {
   return (
