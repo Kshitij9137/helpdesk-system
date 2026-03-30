@@ -1,70 +1,98 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import API from "../api/axios";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
     try {
-      // --- MOCK (remove when backend is ready) ---
+      // --- MOCK ---
+      await new Promise(r => setTimeout(r, 800)); // fake network delay
       if (email === "test@test.com" && password === "1234") {
         login({ access: "fake-access-token", refresh: "fake-refresh-token" });
         navigate("/dashboard");
-        return;
+      } else {
+        setError("Invalid email or password.");
       }
-      // --- REAL API call (uncomment when backend is ready) ---
+
+      // --- REAL API (uncomment when backend ready) ---
       // const res = await API.post("/auth/login/", { email, password });
       // login(res.data);
       // navigate("/dashboard");
-
-      setError("Invalid credentials"); // remove this line when using real API
-    } catch (err) {
-      setError("Login failed. Check your credentials.");
+    } catch {
+      setError("Login failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h2>Login</h2>
-        {error && <p style={styles.error}>{error}</p>}
-        <form onSubmit={handleSubmit}>
-          <input
-            style={styles.input}
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            style={styles.input}
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button style={styles.button} type="submit">Login</button>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+      <div className="bg-white rounded-xl shadow-md w-full max-w-sm p-8">
+
+        {/* Logo */}
+        <div className="text-center mb-6">
+          <span className="text-4xl">🎧</span>
+          <h2 className="text-2xl font-bold text-gray-800 mt-2">HelpDesk</h2>
+          <p className="text-sm text-gray-400 mt-1">Sign in to your account</p>
+        </div>
+
+        {/* Error */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg px-4 py-2.5 mb-4">
+            ⚠️ {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 mb-1">Email</label>
+            <input
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-600 mb-1">Password</label>
+            <input
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-primary text-white font-semibold py-2.5 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {loading ? "Signing in..." : "Sign In"}
+          </button>
         </form>
-        <p>Don't have an account? <Link to="/register">Register</Link></p>
+
+        <p className="text-center text-sm text-gray-400 mt-5">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-primary font-semibold hover:underline">
+            Register
+          </Link>
+        </p>
       </div>
     </div>
   );
 }
-
-const styles = {
-  container: { display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", background: "#f0f2f5" },
-  card: { background: "white", padding: "2rem", borderRadius: "8px", boxShadow: "0 2px 10px rgba(0,0,0,0.1)", width: "350px" },
-  input: { width: "100%", padding: "10px", marginBottom: "1rem", borderRadius: "4px", border: "1px solid #ccc", boxSizing: "border-box" },
-  button: { width: "100%", padding: "10px", background: "#1890ff", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" },
-  error: { color: "red", marginBottom: "1rem" },
-};

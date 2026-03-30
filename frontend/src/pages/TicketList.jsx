@@ -45,53 +45,53 @@ export default function TicketList() {
   }, [statusFilter, priorityFilter, tickets]);
 
   return (
-    <div style={styles.page}>
-      <div style={styles.header}>
+    <div className="p-8 max-w-225 mx-auto">
+      <div className="flex justify-between items-center mb-6">
         <h2>All Tickets</h2>
-        <button style={styles.createBtn} onClick={() => navigate("/tickets/create")}>
+        <button className="p-2 px-4 bg-blue-500 text-white border-none rounded cursor-pointer font-bold" onClick={() => navigate("/tickets/create")}>
           + New Ticket
         </button>
       </div>
 
       {/* Filters */}
-      <div style={styles.filters}>
+      <div className="flex gap-6 items-center mb-6 flex-wrap">
         <div>
-          <label style={styles.label}>Status: </label>
-          <select style={styles.select} value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
+          <label className="font-bold mr-1.5">Status: </label>
+          <select className="p-1.5 px-2.5 rounded border border-gray-300" value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
             {["All", "Open", "In Progress", "Resolved", "Closed"].map(s => (
               <option key={s}>{s}</option>
             ))}
           </select>
         </div>
         <div>
-          <label style={styles.label}>Priority: </label>
-          <select style={styles.select} value={priorityFilter} onChange={e => setPriorityFilter(e.target.value)}>
+          <label className="font-bold mr-1.5">Priority: </label>
+          <select className="p-1.5 px-2.5 rounded border border-gray-300" value={priorityFilter} onChange={e => setPriorityFilter(e.target.value)}>
             {["All", "Low", "Medium", "High", "Critical"].map(p => (
               <option key={p}>{p}</option>
             ))}
           </select>
         </div>
-        <span style={styles.count}>{filtered.length} ticket(s) found</span>
+        <span className="text-gray-500 text-sm">{filtered.length} ticket(s) found</span>
       </div>
 
       {/* Ticket Cards */}
       {filtered.length === 0 ? (
-        <p style={{ color: "#888" }}>No tickets match your filters.</p>
+        <p className="text-gray-500">No tickets match your filters.</p>
       ) : (
         filtered.map(ticket => (
-          <div key={ticket.id} style={styles.card} onClick={() => navigate(`/tickets/${ticket.id}`)}>
-            <div style={styles.cardTop}>
-              <span style={styles.ticketTitle}>{ticket.title}</span>
-              <div style={styles.badges}>
-                <span style={{ ...styles.badge, background: priorityColors[ticket.priority] }}>
+          <div key={ticket.id} className="bg-white border border-gray-200 rounded-lg p-4 px-5 mb-4 cursor-pointer shadow-sm transition-shadow duration-200" onClick={() => navigate(`/tickets/${ticket.id}`)}>
+            <div className="flex justify-between items-center mb-2">
+              <span className="font-semibold text-base">{ticket.title}</span>
+              <div className="flex gap-2">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold text-gray-700" style={{ background: priorityColors[ticket.priority] }}>
                   {ticket.priority}
                 </span>
-                <span style={{ ...styles.badge, background: statusColors[ticket.status], color: "white" }}>
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold text-white" style={{ background: statusColors[ticket.status] }}>
                   {ticket.status}
                 </span>
               </div>
             </div>
-            <div style={styles.cardBottom}>
+            <div className="flex gap-6 text-gray-500 text-xs">
               <span>👤 {ticket.assigned_to}</span>
               <span>🕐 {new Date(ticket.created_at).toLocaleDateString()}</span>
             </div>
@@ -102,18 +102,3 @@ export default function TicketList() {
   );
 }
 
-const styles = {
-  page: { padding: "2rem", maxWidth: "900px", margin: "0 auto" },
-  header: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" },
-  createBtn: { padding: "8px 16px", background: "#1890ff", color: "white", border: "none", borderRadius: "4px", cursor: "pointer", fontWeight: "bold" },
-  filters: { display: "flex", gap: "1.5rem", alignItems: "center", marginBottom: "1.5rem", flexWrap: "wrap" },
-  label: { fontWeight: "bold", marginRight: "6px" },
-  select: { padding: "6px 10px", borderRadius: "4px", border: "1px solid #ccc" },
-  count: { color: "#888", fontSize: "0.9rem" },
-  card: { background: "white", border: "1px solid #e8e8e8", borderRadius: "8px", padding: "1rem 1.25rem", marginBottom: "1rem", cursor: "pointer", boxShadow: "0 1px 4px rgba(0,0,0,0.06)", transition: "box-shadow 0.2s" },
-  cardTop: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" },
-  ticketTitle: { fontWeight: "600", fontSize: "1rem" },
-  badges: { display: "flex", gap: "8px" },
-  badge: { padding: "3px 10px", borderRadius: "12px", fontSize: "0.78rem", fontWeight: "bold", color: "#333" },
-  cardBottom: { display: "flex", gap: "1.5rem", color: "#888", fontSize: "0.85rem" },
-};
