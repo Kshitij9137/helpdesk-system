@@ -1,67 +1,76 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { mockFAQs } from "../../api/mockFAQs";
-// import API from "../../api/axios";
-
-const CURRENT_USER_ROLE = "Admin"; // swap with real role from AuthContext later
+// ✅ FIX: Added missing imports, removed mock import
+import { useAuth } from "../../context/AuthContext";
+import API from "../../api/axios";
 
 export default function FAQDetail() {
   const { id } = useParams();
-  const [faq, setFaq] = useState(null);
+  const [faq, setFaq]         = useState(null);
   const [deleted, setDeleted] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // --- MOCK ---
-    const found = mockFAQs.find(f => f.id === parseInt(id));
-    setFaq(found);
+  // ✅ FIX: useAuth inside component
+  const { user } = useAuth();
+  const CURRENT_USER_ROLE = user?.role
+    ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
+    : "User";
 
-    // --- REAL API (uncomment when backend ready) ---
-    // API.get(`/knowledge-base/${id}/`).then(res => setFaq(res.data));
+  useEffect(() => {
+    API.get(`/knowledge/faqs/${id}/`)
+      .then(res => setFaq(res.data))
+      .catch(() => console.error("Failed to fetch FAQ"));
   }, [id]);
 
-  const handleDelete = () => {
+  // ✅ FIX: added async keyword to handleDelete
+  const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this FAQ?")) return;
-
-    // --- MOCK ---
-    setDeleted(true);
-    setTimeout(() => navigate("/faq"), 1500);
-
-    // --- REAL API (uncomment when backend ready) ---
-    // API.delete(`/knowledge-base/${id}/`).then(() => {
-    //   setDeleted(true);
-    //   setTimeout(() => navigate("/faq"), 1500);
-    // });
+    try {
+      await API.delete(`/knowledge/faqs/${id}/`);
+      setDeleted(true);
+      setTimeout(() => navigate("/faq"), 1500);
+    } catch {
+      alert("Failed to delete FAQ.");
+    }
   };
 
   if (deleted) return <p className="p-8 text-red-500">FAQ deleted. Redirecting...</p>;
-  if (!faq) return <p className="p-8">FAQ not found.</p>;
+  if (!faq)    return <p className="p-8 text-gray-400">Loading FAQ...</p>;
+
+  // ✅ FIX: handle tags whether they come as array or comma string
+  const tags = Array.isArray(faq.tags)
+    ? faq.tags
+    : (faq.tags || "").split(",").map(t => t.trim()).filter(Boolean);
+
+  const categoryName = typeof faq.category === "object"
+    ? faq.category?.name
+    : faq.category;
 
   return (
-    <div className="p-8 max-w-[750px] mx-auto">
-      <button className="bg-none border-none text-blue-500 cursor-pointer text-base mb-4 p-0" onClick={() => navigate("/faq")}>← Back to Knowledge Base</button>
+    <div className="p-8 max-w-3xl mx-auto">
+      <button
+        className="bg-transparent border-none text-blue-500 cursor-pointer text-base mb-4 p-0"
+        onClick={() => navigate("/faq")}
+      >
+        ← Back to Knowledge Base
+      </button>
 
       <div className="bg-white rounded-lg p-7 shadow-sm">
-
-        {/* Category + Tags */}
         <div className="flex items-center gap-2.5 flex-wrap mb-4">
-          <span className="px-3 py-1 bg-blue-50 text-blue-500 rounded-full text-xs font-bold">{faq.category}</span>
+          <span className="px-3 py-1 bg-blue-50 text-blue-500 rounded-full text-xs font-bold">
+            {categoryName}
+          </span>
           <div className="flex gap-1.5 flex-wrap">
-            {faq.tags.map(tag => (
+            {tags.map(tag => (
               <span key={tag} className="bg-gray-100 text-gray-500 px-2 py-0.5 rounded text-xs">#{tag}</span>
             ))}
           </div>
         </div>
 
-        {/* Question */}
-        <h2 className="text-xl font-bold m-0 mb-2 text-gray-800">{faq.question}</h2>
+        <h2 className="text-xl font-bold mb-2 text-gray-800">{faq.question}</h2>
+        <hr className="my-4" />
+        <p className="text-base text-gray-600 leading-relaxed">{faq.answer}</p>
 
-        <hr className="m-4 m-0" />
-
-        {/* Answer */}
-        <p className="text-base text-gray-600 leading-[1.8] m-0">{faq.answer}</p>
-
-        {/* Admin Actions */}
         {CURRENT_USER_ROLE === "Admin" && (
           <div className="flex gap-2.5 mt-6">
             <button
@@ -70,14 +79,16 @@ export default function FAQDetail() {
             >
               ✏️ Edit
             </button>
-            <button className="p-2 px-5 bg-red-500 text-white border-none rounded cursor-pointer font-bold" onClick={handleDelete}>
+            <button
+              className="p-2 px-5 bg-red-500 text-white border-none rounded cursor-pointer font-bold"
+              onClick={handleDelete}
+            >
               🗑️ Delete
             </button>
           </div>
         )}
       </div>
 
-      {/* Was this helpful? */}
       <div className="mt-6 bg-white rounded-lg p-5 shadow-sm text-center">
         <p className="m-0 mb-2 font-bold">Was this helpful?</p>
         <div className="flex gap-3 justify-center">
@@ -88,4 +99,3 @@ export default function FAQDetail() {
     </div>
   );
 }
-

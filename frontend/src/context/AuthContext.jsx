@@ -2,16 +2,28 @@ import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext();
 
+// Decode JWT token to get user info
+function parseJwt(token) {
+  try {
+    return JSON.parse(atob(token.split(".")[1]));
+  } catch {
+    return null;
+  }
+}
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const token = localStorage.getItem("access_token");
-    return token ? { token } : null;
+    if (!token) return null;
+    const decoded = parseJwt(token);
+    return decoded ? { token, ...decoded } : null;
   });
 
   const login = (tokens) => {
-    localStorage.setItem("access_token", tokens.access);
+    localStorage.setItem("access_token",  tokens.access);
     localStorage.setItem("refresh_token", tokens.refresh);
-    setUser({ token: tokens.access });
+    const decoded = parseJwt(tokens.access);
+    setUser({ token: tokens.access, ...decoded });
   };
 
   const logout = () => {

@@ -1,35 +1,26 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import API from "../api/axios";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
-  const navigate = useNavigate();
+  const [error, setError]       = useState("");
+  const [loading, setLoading]   = useState(false);
+  const { login }   = useAuth();
+  const navigate    = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
     try {
-      // --- MOCK ---
-      await new Promise(r => setTimeout(r, 800)); // fake network delay
-      if (email === "test@test.com" && password === "1234") {
-        login({ access: "fake-access-token", refresh: "fake-refresh-token" });
-        navigate("/dashboard");
-      } else {
-        setError("Invalid email or password.");
-      }
-
-      // --- REAL API (uncomment when backend ready) ---
-      // const res = await API.post("/auth/login/", { email, password });
-      // login(res.data);
-      // navigate("/dashboard");
+      const res = await API.post("/users/login/", { username, password });
+      login(res.data);
+      navigate("/dashboard");
     } catch {
-      setError("Login failed. Please try again.");
+      setError("Invalid username or password.");
     } finally {
       setLoading(false);
     }
@@ -38,15 +29,12 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <div className="bg-white rounded-xl shadow-md w-full max-w-sm p-8">
-
-        {/* Logo */}
         <div className="text-center mb-6">
           <span className="text-4xl">🎧</span>
           <h2 className="text-2xl font-bold text-gray-800 mt-2">HelpDesk</h2>
           <p className="text-sm text-gray-400 mt-1">Sign in to your account</p>
         </div>
 
-        {/* Error */}
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg px-4 py-2.5 mb-4">
             ⚠️ {error}
@@ -55,14 +43,14 @@ export default function Login() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-gray-600 mb-1">Email</label>
+            <label className="block text-sm font-semibold text-gray-600 mb-1">Username</label>
             <input
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
+              type="text"
+              placeholder="your username"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-blue-500"
             />
           </div>
           <div>
@@ -73,14 +61,14 @@ export default function Login() {
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
-              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-blue-500"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary text-white font-semibold py-2.5 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full bg-blue-500 text-white font-semibold py-2.5 rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-60"
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>
@@ -88,9 +76,7 @@ export default function Login() {
 
         <p className="text-center text-sm text-gray-400 mt-5">
           Don't have an account?{" "}
-          <Link to="/register" className="text-primary font-semibold hover:underline">
-            Register
-          </Link>
+          <Link to="/register" className="text-blue-500 font-semibold hover:underline">Register</Link>
         </p>
       </div>
     </div>
