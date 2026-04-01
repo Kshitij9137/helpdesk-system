@@ -3,7 +3,6 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-# Register
 class RegisterSerializer(serializers.ModelSerializer):
     password  = serializers.CharField(write_only=True, min_length=8)
     password2 = serializers.CharField(write_only=True, min_length=8)
@@ -19,13 +18,18 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop('password2')
-        user = User.objects.create_user(**validated_data)
+        # ✅ FIX: extract role separately before calling create_user
+        role     = validated_data.pop('role', 'user')
+        password = validated_data.pop('password')
+        user     = User(**validated_data)
+        user.set_password(password)
+        user.role = role
+        user.save()
         return user
 
 
-# Profile view & update
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model  = User
         fields = ['id', 'username', 'email', 'role', 'phone', 'profile_picture']
-        read_only_fields = ['role']  # Only admin can change roles
+        read_only_fields = ['role']

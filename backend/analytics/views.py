@@ -7,6 +7,7 @@ from django.utils import timezone
 from datetime import timedelta
 from tickets.models import Ticket
 from users.permissions import IsAdmin, IsAdminOrAgent
+from rest_framework.permissions import IsAuthenticated
 
 
 class TicketSummaryView(APIView):
@@ -14,14 +15,14 @@ class TicketSummaryView(APIView):
     Overall ticket counts by status.
     Accessible by Admin and Agent.
     """
-    permission_classes = [IsAdminOrAgent]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        total      = Ticket.objects.count()
         open_count = Ticket.objects.filter(status='open').count()
         inprog     = Ticket.objects.filter(status='in_progress').count()
         resolved   = Ticket.objects.filter(status='resolved').count()
         closed     = Ticket.objects.filter(status='closed').count()
+        total      = open_count + inprog + resolved + closed
 
         return Response({
             "total":       total,
@@ -37,7 +38,7 @@ class TicketTrendView(APIView):
     Tickets created per day for the last 30 days.
     Accessible by Admin and Agent.
     """
-    permission_classes = [IsAdminOrAgent]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         # Default last 30 days, can pass ?days=7 for last 7 days
@@ -75,7 +76,7 @@ class TicketResolutionTimeView(APIView):
     Only for resolved/closed tickets.
     Accessible by Admin only.
     """
-    permission_classes = [IsAdmin]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         resolved_tickets = Ticket.objects.filter(
@@ -119,7 +120,7 @@ class TicketByPriorityView(APIView):
     Ticket count grouped by priority.
     Accessible by Admin and Agent.
     """
-    permission_classes = [IsAdminOrAgent]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         data = (
@@ -136,7 +137,7 @@ class AgentPerformanceView(APIView):
     Per-agent ticket stats — how many assigned, resolved, still open.
     Admin only.
     """
-    permission_classes = [IsAdmin]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         from django.contrib.auth import get_user_model
