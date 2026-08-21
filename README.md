@@ -47,3 +47,24 @@ It supports role-based access (Admin, Agent, User), ticket lifecycle management,
 ---
 
 ## Project Structure
+
+helpdesk-system/
+├── backend/                  # Django project
+│   ├── helpdesk/             # Project settings & URLs
+│   ├── users/                # Custom User model + auth
+│   ├── tickets/              # Ticket models & APIs
+│   ├── knowledge_base/       # FAQs & Categories
+│   ├── analytics/            # Dashboard endpoints
+│   ├── media/                # Uploaded profile pictures
+│   ├── manage.py
+│   └── requirements.txt
+├── frontend/                 # React (Create React App)
+│   ├── src/
+│   │   ├── api/              # Axios instance + mocks
+│   │   ├── components/       # Layout, Navbar, Sidebar, etc.
+│   │   ├── context/          # AuthContext
+│   │   ├── pages/            # Login, Tickets, FAQ, Dashboard
+│   │   └── ...
+│   ├── package.json
+│   └── ...
+└── requirements.txt          # Root dependencies (optional)
