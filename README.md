@@ -229,4 +229,3 @@ Authorization: Bearer <access_token>
 
 
 Made with ❤️ using Django & React
-```
