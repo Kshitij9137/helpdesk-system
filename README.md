@@ -106,7 +106,6 @@ helpdesk-system/
 │   └── tailwind.config.js
 ├── .gitignore
 └── requirements.txt
----
 
 ## Getting Started
 
